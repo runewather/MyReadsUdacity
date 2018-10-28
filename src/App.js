@@ -1,6 +1,7 @@
 import React from 'react'
 import * as BooksAPI from './BooksAPI'
 import BookShelf from './BookShelf'
+import BookSearch from './BookSearch'
 import { Link } from 'react-router-dom'
 import { Route } from 'react-router-dom'
 import './App.css'
@@ -10,9 +11,7 @@ class BooksApp extends React.Component {
   constructor() {
     super();
     this.state = {
-      books : [],
-      booksFound : [],
-      isLoading : true
+      books : []
     }
   }
 
@@ -21,11 +20,9 @@ class BooksApp extends React.Component {
   }
 
   getBookList = () => {
-    this.setState({ isLoading : true });
     BooksAPI.getAll().then((bookList) => {   
       this.setState({
-        books : bookList,
-        isLoading : false
+        books : bookList
       });     
     }); 
   }
@@ -40,35 +37,10 @@ class BooksApp extends React.Component {
     );
   }
 
-  findBook = (e) => {
-    let query = e.target.value;
-    if(query.length > 0) {
-      BooksAPI.search(query).then((books) => {
-        if(books.length > 0) {
-          this.setState({
-            booksFound : books
-          }); 
-        }
-      });
-    }
-  }
-
   render = () => {   
     return (
       <div className="app">
-          <Route e path='/search' render={() => (
-            <div className="search-books">
-              <div className="search-books-bar">
-                <Link to='/' className="close-search" onClick={() => this.setState({ showSearchPage: false })}>Close</Link>
-                <div className="search-books-input-wrapper">                
-                  <input type="text" placeholder="Search by title or author" onChange={this.findBook}/>
-                </div>
-              </div>
-              <div className="search-books-results">
-                <BookShelf name='Books Found' bookList={this.state.booksFound} setBookShelf={this.setBookShelf}/>
-              </div>
-            </div>
-          )} />
+          <Route exact path='/search' render={() => {return (<BookSearch handleInput={this.handleInput} books={this.state.books} setBookShelf={this.setBookShelf}/>)}} />
           <Route exact path='/' render={() => (
             <div className="list-books">
               <div className="list-books-title">

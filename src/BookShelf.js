@@ -1,6 +1,6 @@
-import React, {Component} from "react";
-import Book from './Book';
-import PropTypes from 'prop-types';
+import React, {Component} from "react"
+import Book from './Book'
+import PropTypes from 'prop-types'
 
 class BookShelf extends Component {
     render = () => {
