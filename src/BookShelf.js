@@ -9,12 +9,12 @@ class BookShelf extends Component {
                 <h2 className="bookshelf-title">{this.props.name}</h2>
                 <div className="bookshelf-books">
                 <ol className="books-grid">
-                    {this.props.bookList.map((book) => {   
+                    {this.props.bookList.length > 0 ? this.props.bookList.map((book, index) => {   
                     if(!this.props.isLoading) {                       
-                        return (<li key={book.title}><Book info={book} setBookShelf={this.props.setBookShelf} /></li>)
+                        return (<li key={index}><Book info={book} setBookShelf={this.props.setBookShelf} /></li>)
                     }
                     return null;   
-                    })}   
+                    }) : null}   
                 </ol>
                 </div>
             </div>

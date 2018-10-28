@@ -11,7 +11,7 @@ class BooksApp extends React.Component {
     super();
     this.state = {
       books : [],
-      searchBookName : '',
+      booksFound : [],
       isLoading : true
     }
   }
@@ -40,6 +40,19 @@ class BooksApp extends React.Component {
     );
   }
 
+  findBook = (e) => {
+    let query = e.target.value;
+    if(query.length > 0) {
+      BooksAPI.search(query).then((books) => {
+        if(books.length > 0) {
+          this.setState({
+            booksFound : books
+          }); 
+        }
+      });
+    }
+  }
+
   render = () => {   
     return (
       <div className="app">
@@ -48,11 +61,11 @@ class BooksApp extends React.Component {
               <div className="search-books-bar">
                 <Link to='/' className="close-search" onClick={() => this.setState({ showSearchPage: false })}>Close</Link>
                 <div className="search-books-input-wrapper">                
-                  <input type="text" placeholder="Search by title or author"/>
+                  <input type="text" placeholder="Search by title or author" onChange={this.findBook}/>
                 </div>
               </div>
               <div className="search-books-results">
-                <ol className="books-grid"></ol>
+                <BookShelf name='Books Found' bookList={this.state.booksFound} setBookShelf={this.setBookShelf}/>
               </div>
             </div>
           )} />
