@@ -15,20 +15,25 @@ class BooksApp extends React.Component {
     }
   }
 
-  componentWillMount = () => {
+  async componentDidMount() {
     this.getBookList();
   }
 
-  getBookList = () => {
-    BooksAPI.getAll().then((bookList) => {   
-      this.setState({
-        books : bookList
-      });     
-    }); 
+  getBookList = async () => {
+    const allBooks = await BooksAPI.getAll();
+    this.setState({
+      books : allBooks
+    });   
   }
 
   setBookShelf = (book, shelf) => {    
-    BooksAPI.update(book, shelf).then(this.getBookList);
+    BooksAPI.update(book, shelf);
+
+    book.shelf = shelf;    
+
+    this.setState({
+      books : this.state.books
+    });    
   }
 
   getBooksByShelf = (shelfName) => {
@@ -40,7 +45,7 @@ class BooksApp extends React.Component {
   render = () => {   
     return (
       <div className="app">
-          <Route exact path='/search' render={() => {return (<BookSearch handleInput={this.handleInput} books={this.state.books} setBookShelf={this.setBookShelf}/>)}} />
+          <Route exact path='/search' render={() => {return (<BookSearch handleInput={this.handleInput} getBookList={this.getBookList} books={this.state.books} setBookShelf={this.setBookShelf}/>)}} />
           <Route exact path='/' render={() => (
             <div className="list-books">
               <div className="list-books-title">
